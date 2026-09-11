@@ -11,14 +11,14 @@ interface MazeGameProps {
 export default function MazeGame({ onWin, qrUrl }: MazeGameProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [matrix, setMatrix] = useState<boolean[][] | null>(null);
-  const [playerPos, setPlayerPos] = useState({ row: 4, col: 4 });
+  const [playerPos, setPlayerPos] = useState({ row: 5, col: 5 });
   const [cellSize, setCellSize] = useState(12);
 
   // Generate QR Maze on mount
   useEffect(() => {
     const m = generateQRMatrix(qrUrl);
     setMatrix(m);
-    setPlayerPos({ row: 4, col: 4 });
+    setPlayerPos({ row: 5, col: 5 });
   }, [qrUrl]);
 
   // Responsive cell size
@@ -68,24 +68,14 @@ export default function MazeGame({ onWin, qrUrl }: MazeGameProps) {
       }
     }
     
-    // Draw Finder Patterns (Corners)
-    const drawFinder = (rowOffset: number, colOffset: number) => {
-      ctx.fillStyle = '#000000';
-      ctx.fillRect(colOffset * cellSize, rowOffset * cellSize, 7 * cellSize, 7 * cellSize);
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect((colOffset + 1) * cellSize, (rowOffset + 1) * cellSize, 5 * cellSize, 5 * cellSize);
-      ctx.fillStyle = '#000000';
-      ctx.fillRect((colOffset + 2) * cellSize, (rowOffset + 2) * cellSize, 3 * cellSize, 3 * cellSize);
-    };
-    
-    // Top-Right finder pattern (The other two are hollowed out for Start/Exit)
-    drawFinder(2, size - 9);
+    // We no longer draw the custom finder patterns to hollow them out.
+    // The original QR code's finder patterns remain intact.
 
-    // End marker (Bottom-Right finder area)
-    const ex = (size - 4.5) * cellSize;
-    const ey = (size - 4.5) * cellSize;
+    // End marker
+    const ex = (size - 6) * cellSize + cellSize / 2;
+    const ey = (size - 6) * cellSize + cellSize / 2;
     ctx.fillStyle = '#27ae60';
-    ctx.font = `${cellSize * 3}px sans-serif`;
+    ctx.font = `${cellSize * 1.5}px sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText('⭐', ex, ey);
@@ -120,13 +110,14 @@ export default function MazeGame({ onWin, qrUrl }: MazeGameProps) {
       else if (dir === 'left' && col > 0) newCol--;
       else if (dir === 'right' && col < size - 1) newCol++;
 
-      // Check collision with walls (black modules)
-      if (!matrix[newRow][newCol]) {
+      // Check collision with walls (black modules) and prevent walking on the quiet zone margin
+      const margin = 2;
+      if (!matrix[newRow][newCol] && newRow >= margin && newRow < size - margin && newCol >= margin && newCol < size - margin) {
         if (newRow !== row || newCol !== col) {
           setPlayerPos({ row: newRow, col: newCol });
 
-          // Check win condition (reached bottom-right area)
-          if (newRow >= size - 6 && newCol >= size - 6) {
+          // Check win condition
+          if (newRow === size - 6 && newCol === size - 6) {
             setTimeout(onWin, 200);
           }
         }

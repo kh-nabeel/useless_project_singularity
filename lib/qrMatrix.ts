@@ -26,37 +26,23 @@ export function generateQRMatrix(url: string): boolean[][] {
     matrix.push(row);
   }
   
-  // Hollow out the top-left finder pattern for the Spawn area (7x7)
-  for (let r = 2; r < 7; r++) {
-    for (let c = 2; c < 7; c++) {
-      matrix[r][c] = false;
-    }
-  }
-  
-  // Hollow out the bottom-right finder pattern for the Exit portal (7x7)
-  for (let r = size - 7; r < size - 2; r++) {
-    for (let c = size - 7; c < size - 2; c++) {
-      matrix[r][c] = false;
-    }
-  }
-  
   // Ensure there is a solvable path from top-left to bottom-right
-  matrix = ensureSolvable(matrix);
+  matrix = ensureSolvable(matrix, margin);
   
   return matrix;
 }
 
 /**
- * Guarantees a path exists from (4,4) to (size-5, size-5).
+ * Guarantees a path exists from (5,5) to (size-6, size-6).
  * Uses Dijkstra's algorithm where breaking a wall costs 100, and walking on empty path costs 1.
  */
-function ensureSolvable(matrix: boolean[][]): boolean[][] {
+function ensureSolvable(matrix: boolean[][], margin: number): boolean[][] {
   const size = matrix.length;
   const dist: number[][] = Array.from({ length: size }, () => Array(size).fill(Infinity));
   const parent: {r: number, c: number}[][] = Array.from({ length: size }, () => Array(size).fill(null));
   
-  const start = { r: 4, c: 4 };
-  const end = { r: size - 5, c: size - 5 };
+  const start = { r: margin + 3, c: margin + 3 };
+  const end = { r: size - margin - 4, c: size - margin - 4 };
   
   dist[start.r][start.c] = 0;
   
@@ -75,7 +61,7 @@ function ensureSolvable(matrix: boolean[][]): boolean[][] {
       const nr = curr.r + dr;
       const nc = curr.c + dc;
       
-      if (nr >= 0 && nr < size && nc >= 0 && nc < size) {
+      if (nr >= margin && nr < size - margin && nc >= margin && nc < size - margin) {
         const costToMove = matrix[nr][nc] ? 100 : 1; // Breaking a wall is expensive
         const newCost = curr.cost + costToMove;
         

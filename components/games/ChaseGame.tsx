@@ -16,7 +16,7 @@ interface Pos {
 export default function ChaseGame({ onWin, qrUrl }: ChaseGameProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [matrix, setMatrix] = useState<boolean[][] | null>(null);
-  const [player, setPlayer] = useState<Pos>({ row: 4, col: 4 });
+  const [player, setPlayer] = useState<Pos>({ row: 5, col: 5 });
   const [ghost, setGhost] = useState<Pos>({ row: 10, col: 10 });
   const [dots, setDots] = useState<boolean[][]>([]);
   const [dotsLeft, setDotsLeft] = useState(0);
@@ -32,16 +32,16 @@ export default function ChaseGame({ onWin, qrUrl }: ChaseGameProps) {
   useEffect(() => {
     const m = generateQRMatrix(qrUrl);
     setMatrix(m);
-    setPlayer({ row: 4, col: 4 });
+    setPlayer({ row: 5, col: 5 });
     const size = m.length;
     
-    // Ghost starts in the bottom right corner (the hollowed out area)
-    setGhost({ row: size - 5, col: size - 5 });
+    // Ghost starts near the bottom right corner
+    setGhost({ row: size - 6, col: size - 6 });
     
-    // Flood fill to find all accessible white cells from player start (4,4)
+    // Flood fill to find all accessible white cells from player start (5,5)
     const accessible = Array.from({ length: size }, () => Array(size).fill(false));
-    const q: {r: number, c: number}[] = [{ r: 4, c: 4 }];
-    accessible[4][4] = true;
+    const q: {r: number, c: number}[] = [{ r: 5, c: 5 }];
+    accessible[5][5] = true;
     
     while (q.length > 0) {
       const curr = q.shift()!;
@@ -49,31 +49,66 @@ export default function ChaseGame({ onWin, qrUrl }: ChaseGameProps) {
       for (const [dr, dc] of dirs) {
         const nr = curr.r + dr;
         const nc = curr.c + dc;
-        if (nr >= 0 && nr < size && nc >= 0 && nc < size && !m[nr][nc] && !accessible[nr][nc]) {
+        const margin = 2;
+        if (nr >= margin && nr < size - margin && nc >= margin && nc < size - margin && !m[nr][nc] && !accessible[nr][nc]) {
           accessible[nr][nc] = true;
           q.push({ r: nr, c: nc });
         }
       }
     }
 
-    // Initialize dots sparsely only on accessible white cells
-    let dotCount = 0;
-    const initialDots: boolean[][] = [];
+    // Gather all valid candidates for dots, excluding margins
+    const candidates: {r: number, c: number}[] = [];
+    const margin = 2;
     for (let r = 0; r < size; r++) {
-      const rowDots: boolean[] = [];
       for (let c = 0; c < size; c++) {
         const isStart = (r >= 2 && r <= 6 && c >= 2 && c <= 6);
         const isGhost = (r >= size - 7 && r <= size - 3 && c >= size - 7 && c <= size - 3);
+        const isMargin = (r < margin || r >= size - margin || c < margin || c >= size - margin);
         
-        // Place dots only in accessible corridors (not in spawn/exit boxes) with some sparsity
-        const hasDot = accessible[r][c] && !isStart && !isGhost && Math.random() > 0.6;
-        rowDots.push(hasDot);
-        if (hasDot) dotCount++;
+        if (accessible[r][c] && !isStart && !isGhost && !isMargin) {
+          candidates.push({ r, c });
+        }
       }
-      initialDots.push(rowDots);
     }
+
+    // Pick 5 dots with relatively less distance (clustered)
+    const selected: {r: number, c: number}[] = [];
+    const targetDots = Math.min(5, candidates.length);
+    
+    if (candidates.length > 0) {
+      // Pick the first one randomly
+      const firstIdx = Math.floor(Math.random() * candidates.length);
+      selected.push(candidates[firstIdx]);
+      candidates.splice(firstIdx, 1);
+      
+      while (selected.length < targetDots && candidates.length > 0) {
+        const center = selected[0];
+        // Find candidates within a small distance to cluster them
+        const nearby = candidates.filter(c => Math.abs(c.r - center.r) + Math.abs(c.c - center.c) <= 12);
+        
+        if (nearby.length > 0) {
+          const idx = Math.floor(Math.random() * nearby.length);
+          const chosen = nearby[idx];
+          selected.push(chosen);
+          const cIdx = candidates.findIndex(c => c.r === chosen.r && c.c === chosen.c);
+          candidates.splice(cIdx, 1);
+        } else {
+          // Fallback if no nearby candidates are left
+          const idx = Math.floor(Math.random() * candidates.length);
+          selected.push(candidates[idx]);
+          candidates.splice(idx, 1);
+        }
+      }
+    }
+
+    const initialDots: boolean[][] = Array.from({ length: size }, () => Array(size).fill(false));
+    for (const s of selected) {
+      initialDots[s.r][s.c] = true;
+    }
+
     setDots(initialDots);
-    setDotsLeft(dotCount);
+    setDotsLeft(selected.length);
   }, [qrUrl]);
 
   // Responsive cell size
@@ -166,7 +201,8 @@ export default function ChaseGame({ onWin, qrUrl }: ChaseGameProps) {
         else if (dir === 'left' && col > 0) nc--;
         else if (dir === 'right' && col < size - 1) nc++;
 
-        if (!matrix[nr][nc]) {
+        const margin = 2;
+        if (!matrix[nr][nc] && nr >= margin && nr < size - margin && nc >= margin && nc < size - margin) {
           row = nr;
           col = nc;
         }
@@ -202,7 +238,8 @@ export default function ChaseGame({ onWin, qrUrl }: ChaseGameProps) {
         const directions: Pos[] = [];
 
         const tryAdd = (r: number, c: number) => {
-          if (r >= 0 && r < size && c >= 0 && c < size && !matrix[r][c]) {
+          const margin = 2;
+          if (r >= margin && r < size - margin && c >= margin && c < size - margin && !matrix[r][c]) {
             directions.push({ row: r, col: c });
           }
         };
@@ -235,7 +272,7 @@ export default function ChaseGame({ onWin, qrUrl }: ChaseGameProps) {
         if (Math.abs(g.row - p.row) <= 1 && Math.abs(g.col - p.col) <= 1) {
            // To be forgiving, only kill if they are exactly on same tile
            if (g.row === p.row && g.col === p.col) {
-              setPlayer({ row: 4, col: 4 });
+              setPlayer({ row: 5, col: 5 });
            }
         }
       }, 50);
