@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
-import { ArrowLeft, Download, QrCode, Loader2 } from 'lucide-react';
+import { ArrowLeft, Download, QrCode } from 'lucide-react';
 import Link from 'next/link';
+import { BrutalistButton } from '@/components/ui/BrutalistButton';
 
 export default function CreatePage() {
   const [url, setUrl] = useState('');
@@ -56,27 +57,27 @@ export default function CreatePage() {
   };
 
   return (
-    <main className="min-h-screen bg-[--clay-bg] flex flex-col items-center px-4 py-8">
+    <main className="min-h-screen bg-white flex flex-col items-center px-4 py-8">
       <div className="w-full max-w-md">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-[#5c4a3a] mb-6 hover:opacity-70 transition-opacity"
+          className="inline-flex items-center gap-2 text-[#0e0e0d] mb-6 font-bold hover:underline"
         >
           <ArrowLeft size={20} />
-          Back
+          back
         </Link>
 
-        <div className="clay p-8">
+        <div className="brutalist-container p-8">
           <div className="flex items-center gap-3 mb-6">
-            <QrCode size={32} className="text-[#ff6b6b]" />
-            <h1 className="text-2xl font-bold text-[#5c4a3a]">Create a Game QR</h1>
+            <QrCode size={32} className="text-[#ea34df]" />
+            <h1 className="font-[family-name:var(--font-rubik)] text-2xl text-[#0e0e0d] lowercase">create a game qr</h1>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label
                 htmlFor="destination-url"
-                className="block text-sm font-semibold text-[#8b7d6b] mb-2"
+                className="block text-sm font-bold text-[#0e0e0d] mb-2 uppercase"
               >
                 Destination URL *
               </label>
@@ -87,18 +88,14 @@ export default function CreatePage() {
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 required
-                className="w-full px-4 py-3 rounded-2xl bg-[#e8e0d4] text-[#5c4a3a] placeholder-[#b0a090] outline-none transition-shadow focus:shadow-[inset_4px_4px_8px_rgba(163,177,198,0.6),inset_-4px_-4px_8px_rgba(255,255,255,0.8)]"
-                style={{
-                  boxShadow:
-                    'inset 3px 3px 6px rgba(163,177,198,0.4), inset -3px -3px 6px rgba(255,255,255,0.6)',
-                }}
+                className="w-full px-4 py-3 rounded-md bg-white border-2 border-[#0e0e0d] text-[#0e0e0d] placeholder-gray-400 outline-none focus:ring-4 focus:ring-[#ea34df]/50 transition-shadow"
               />
             </div>
 
             <div>
               <label
                 htmlFor="label"
-                className="block text-sm font-semibold text-[#8b7d6b] mb-2"
+                className="block text-sm font-bold text-[#0e0e0d] mb-2 uppercase"
               >
                 Label (optional)
               </label>
@@ -108,62 +105,46 @@ export default function CreatePage() {
                 placeholder="My awesome link"
                 value={label}
                 onChange={(e) => setLabel(e.target.value)}
-                className="w-full px-4 py-3 rounded-2xl bg-[#e8e0d4] text-[#5c4a3a] placeholder-[#b0a090] outline-none transition-shadow focus:shadow-[inset_4px_4px_8px_rgba(163,177,198,0.6),inset_-4px_-4px_8px_rgba(255,255,255,0.8)]"
-                style={{
-                  boxShadow:
-                    'inset 3px 3px 6px rgba(163,177,198,0.4), inset -3px -3px 6px rgba(255,255,255,0.6)',
-                }}
+                className="w-full px-4 py-3 rounded-md bg-white border-2 border-[#0e0e0d] text-[#0e0e0d] placeholder-gray-400 outline-none focus:ring-4 focus:ring-[#ea34df]/50 transition-shadow"
               />
             </div>
 
             {error && (
-              <p className="text-red-500 text-sm bg-red-50 p-3 rounded-xl">{error}</p>
+              <p className="text-[#ffffff] text-sm bg-red-600 font-bold p-3 rounded-md border-2 border-[#0e0e0d] shadow-[4px_4px_0px_#0e0e0d]">{error}</p>
             )}
 
-            <button
+            <BrutalistButton
               type="submit"
               disabled={!isValidUrl || loading}
-              className="clay-btn w-full py-4 rounded-2xl text-lg font-bold text-[#5c4a3a] disabled:opacity-40 active:scale-[0.98] transition-transform flex items-center justify-center gap-2"
+              isLoading={loading}
+              className="w-full"
             >
-              {loading ? (
-                <>
-                  <Loader2 size={20} className="animate-spin" />
-                  Generating...
-                </>
-              ) : (
-                <>
-                  <QrCode size={20} />
-                  Generate QR Code
-                </>
-              )}
-            </button>
+              <QrCode size={20} />
+              Generate QR Code
+            </BrutalistButton>
           </form>
         </div>
 
         {/* QR Result */}
         {qrUrl && (
-          <div className="clay p-8 mt-6 flex flex-col items-center gap-5">
-            <h2 className="text-lg font-bold text-[#5c4a3a]">Your Game QR Code</h2>
+          <div className="brutalist-container p-8 mt-8 flex flex-col items-center gap-5 bg-[#f8f9fa] animate-bounce-in">
+            <h2 className="font-[family-name:var(--font-rubik)] text-lg text-[#0e0e0d] lowercase text-center">your game qr code</h2>
             <div
               id="qr-canvas"
-              className="p-4 bg-white rounded-2xl"
-              style={{
-                boxShadow:
-                  'inset 3px 3px 6px rgba(163,177,198,0.3), inset -3px -3px 6px rgba(255,255,255,0.5)',
-              }}
+              className="p-4 bg-white border-2 border-[#0e0e0d] rounded-md"
             >
               <QRCodeCanvas value={qrUrl} size={220} level="M" />
             </div>
-            <p className="text-xs text-[#8b7d6b] text-center break-all max-w-[280px]">
+            <p className="font-[family-name:var(--font-nanum)] text-xl text-[#242525] text-center break-all max-w-[280px]">
               {qrUrl}
             </p>
-            <button
+            <BrutalistButton
               onClick={handleDownload}
-              className="clay-btn px-6 py-3 rounded-2xl font-semibold text-[#5c4a3a] flex items-center gap-2 active:scale-95 transition-transform"
+              className="bg-[#ea34df] hover:bg-[#d02bc5]"
             >
               <Download size={18} />
               Download QR
-            </button>
+            </BrutalistButton>
           </div>
         )}
       </div>

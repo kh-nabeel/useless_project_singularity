@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { generateQRMatrix } from '@/lib/qrMatrix';
+import { BrutalistButton } from '@/components/ui/BrutalistButton';
 
 interface MazeGameProps {
   onWin: () => void;
@@ -141,46 +142,46 @@ export default function MazeGame({ onWin, qrUrl }: MazeGameProps) {
   }, [move]);
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      <h2 className="text-xl font-bold text-[#5c4a3a]">🏰 Escape the QR Maze!</h2>
-      <p className="text-sm text-[#8b7d6b]">Navigate the code to reach the ⭐</p>
-      <div className="p-2 bg-white rounded-2xl" style={{ boxShadow: '4px 4px 12px rgba(163,177,198,0.6), -4px -4px 12px rgba(255,255,255,0.8)' }}>
+    <div className="flex flex-col items-center gap-4 w-full">
+      <h2 className="font-[family-name:var(--font-rubik)] text-xl text-[#0e0e0d] text-center lowercase">🏰 escape the qr maze!</h2>
+      <p className="font-bold text-sm text-[#242525]">Navigate the code to reach the ⭐</p>
+      <div className="p-2 bg-white rounded-md border-2 border-[#0e0e0d] shadow-[4px_4px_0px_#0e0e0d]">
         <canvas ref={canvasRef} />
       </div>
       {/* D-Pad for mobile */}
-      <div className="grid grid-cols-3 gap-2 w-[180px] mt-2">
+      <div className="grid grid-cols-3 gap-2 w-[180px] mt-4">
         <div />
-        <button
+        <BrutalistButton
           onClick={() => move('up')}
-          className="clay-btn h-14 rounded-2xl text-2xl active:scale-95 transition-transform"
+          className="h-14 px-0 py-0 text-2xl"
           aria-label="Move up"
         >
           ▲
-        </button>
+        </BrutalistButton>
         <div />
-        <button
+        <BrutalistButton
           onClick={() => move('left')}
-          className="clay-btn h-14 rounded-2xl text-2xl active:scale-95 transition-transform"
+          className="h-14 px-0 py-0 text-2xl"
           aria-label="Move left"
         >
           ◀
-        </button>
+        </BrutalistButton>
         <div className="h-14" />
-        <button
+        <BrutalistButton
           onClick={() => move('right')}
-          className="clay-btn h-14 rounded-2xl text-2xl active:scale-95 transition-transform"
+          className="h-14 px-0 py-0 text-2xl"
           aria-label="Move right"
         >
           ▶
-        </button>
+        </BrutalistButton>
         <div />
-        <button
+        <BrutalistButton
           onClick={() => move('down')}
-          className="clay-btn h-14 rounded-2xl text-2xl active:scale-95 transition-transform"
+          className="h-14 px-0 py-0 text-2xl"
           aria-label="Move down"
         >
           ▼
-        </button>
+        </BrutalistButton>
         <div />
       </div>
     </div>

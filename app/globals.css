@@ -1,74 +1,74 @@
 @import "tailwindcss";
 
-:root {
-  --clay-bg: #e0e5ec;
-  --clay-shadow-light: rgba(255, 255, 255, 0.8);
-  --clay-shadow-dark: rgba(163, 177, 198, 0.6);
-}
-
 @theme inline {
-  --color-background: var(--clay-bg);
-  --color-foreground: #5c4a3a;
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-nanum: var(--font-nanum-pen);
+  --font-rubik: var(--font-rubik-mono);
 }
 
 body {
-  background: var(--clay-bg);
-  color: #5c4a3a;
+  background: #ffffff;
+  color: #0e0e0d;
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* === Claymorphism Utilities === */
+/* === Useless Projects Aesthetic Utilities === */
 
-.clay {
-  background: var(--clay-bg);
-  border-radius: 28px;
-  box-shadow:
-    8px 8px 16px var(--clay-shadow-dark),
-    -8px -8px 16px var(--clay-shadow-light);
+.brutalist-container {
+  background: #ffffff;
+  border: 4px solid #0e0e0d;
+  border-radius: 8px;
+  box-shadow: 6px 6px 0px #0e0e0d;
 }
 
-.clay-pressed,
-.clay:active {
-  box-shadow:
-    inset 6px 6px 12px var(--clay-shadow-dark),
-    inset -6px -6px 12px var(--clay-shadow-light);
-}
-
-.clay-btn {
-  background: var(--clay-bg);
-  box-shadow:
-    5px 5px 10px var(--clay-shadow-dark),
-    -5px -5px 10px var(--clay-shadow-light);
+.brutalist-btn {
+  background: #0e0e0d;
+  color: #ffffff;
+  border: 2px solid #0e0e0d;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
   cursor: pointer;
-  border: none;
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  border-radius: 6px;
+  font-family: var(--font-rubik);
+  text-transform: uppercase;
+  transition: all 0.2s ease-out;
 }
 
-.clay-btn:active {
-  box-shadow:
-    inset 4px 4px 8px var(--clay-shadow-dark),
-    inset -4px -4px 8px var(--clay-shadow-light);
+.brutalist-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.3);
+  background: #1a1a1a;
 }
 
-.clay-btn:disabled {
+.brutalist-btn:active {
+  transform: translateY(2px) scale(0.98);
+  box-shadow: inset 2px 2px 8px rgba(0,0,0,0.5);
+}
+
+.brutalist-btn:disabled {
   cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Base styles for the games */
+.game-container {
+  background: #1a1a2e; /* dark retro space */
+  border: 6px solid #0e0e0d;
+  border-radius: 12px;
+  box-shadow: 8px 8px 0px #0e0e0d;
 }
 
 /* === Animations === */
 
-@keyframes bounce-slow {
+@keyframes float-slow {
   0%, 100% {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(-15px);
   }
 }
 
-.animate-bounce-slow {
-  animation: bounce-slow 3s ease-in-out infinite;
+.animate-float-slow {
+  animation: float-slow 4s ease-in-out infinite;
 }
 
 @keyframes bounce-in {
@@ -92,28 +92,23 @@ body {
   animation: bounce-in 0.6s ease-out;
 }
 
-/* === Remove hard borders globally === */
-* {
-  border-color: transparent;
-}
-
-/* Ensure no focus outlines break the clay look */
+/* === Remove defaults globally === */
 *:focus-visible {
-  outline: 3px solid rgba(255, 107, 107, 0.4);
+  outline: 3px solid rgba(234, 52, 223, 0.6); /* Useless Projects Pink */
   outline-offset: 2px;
-  border-radius: 12px;
+  border-radius: 4px;
 }
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--clay-bg);
+  background: #f8f9fa;
+  border-left: 2px solid #0e0e0d;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(163, 177, 198, 0.6);
-  border-radius: 4px;
+  background: #0e0e0d;
 }

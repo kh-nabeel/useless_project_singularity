@@ -191,15 +191,14 @@ export default function ImposterGame({ onWin, qrUrl }: ImposterGameProps) {
   const foundCount = imposters.filter(i => i.found).length;
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      <h2 className="text-xl font-bold text-[#5c4a3a]">🕵️‍♂️ Find the Imposters!</h2>
-      <p className="text-sm text-[#8b7d6b]">
-        Find 3 emojis hiding in the pixels: <strong className="text-[#27ae60]">{foundCount}/3</strong>
+    <div className="flex flex-col items-center gap-4 w-full">
+      <h2 className="font-[family-name:var(--font-rubik)] text-xl text-[#0e0e0d] text-center lowercase">🕵️‍♂️ find the imposters!</h2>
+      <p className="font-bold text-sm text-[#242525]">
+        Find 3 emojis hiding in the pixels: <strong className="text-[#ea34df]">{foundCount}/3</strong>
       </p>
       
       <div 
-        className="p-2 bg-white rounded-2xl cursor-crosshair touch-none" 
-        style={{ boxShadow: '4px 4px 12px rgba(163,177,198,0.6), -4px -4px 12px rgba(255,255,255,0.8)' }}
+        className="p-2 bg-white rounded-md border-2 border-[#0e0e0d] shadow-[4px_4px_0px_#0e0e0d] cursor-crosshair touch-none" 
       >
         <canvas 
           ref={canvasRef} 
@@ -212,10 +211,10 @@ export default function ImposterGame({ onWin, qrUrl }: ImposterGameProps) {
         {imposters.map((imp, idx) => (
           <div 
             key={idx}
-            className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl transition-all ${
+            className={`w-12 h-12 rounded-md border-2 border-[#0e0e0d] flex items-center justify-center text-2xl transition-all ${
               imp.found 
-                ? 'bg-[#a8e6a3] shadow-[inset_2px_2px_5px_rgba(0,0,0,0.1)]' 
-                : 'bg-[#e8e0d4] opacity-50 grayscale'
+                ? 'bg-[#ea34df] shadow-[2px_2px_0px_#0e0e0d]' 
+                : 'bg-white shadow-[2px_2px_0px_#0e0e0d] opacity-50 grayscale'
             }`}
           >
             {imp.emoji}

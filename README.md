@@ -8,6 +8,9 @@
 
 ### Team Name: Singularity
 
+### Team Members:
+- **Member 1**: K H Nabeel - NSS College of Engineering Palakkad
+- **Member 2**: Abdul Musavvir T - NSS College of Engineering Palakkad
 ### Project Description
 A web app where QR codes don't go straight to the destination. Instead, scanning one opens a random mini-game built directly into the QR code matrix. Only after winning does the player get redirected to the real URL!
 

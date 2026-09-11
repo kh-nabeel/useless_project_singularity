@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { generateQRMatrix } from '@/lib/qrMatrix';
+import { BrutalistButton } from '@/components/ui/BrutalistButton';
 
 interface ChaseGameProps {
   onWin: () => void;
@@ -296,24 +297,24 @@ export default function ChaseGame({ onWin, qrUrl }: ChaseGameProps) {
   }, [movePlayer]);
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      <h2 className="text-xl font-bold text-[#5c4a3a]">👾 Eat the Data Packets!</h2>
-      <p className="text-sm text-[#8b7d6b]">
+    <div className="flex flex-col items-center gap-4 w-full">
+      <h2 className="font-[family-name:var(--font-rubik)] text-xl text-[#0e0e0d] text-center lowercase">👾 eat the data packets!</h2>
+      <p className="font-bold text-sm text-[#242525]">
         Avoid the glitch bug! {dotsLeft} packets left
       </p>
-      <div className="p-2 bg-[#1a1a2e] rounded-2xl" style={{ boxShadow: '4px 4px 12px rgba(163,177,198,0.6), -4px -4px 12px rgba(255,255,255,0.8)' }}>
+      <div className="p-2 bg-[#1a1a2e] rounded-md border-2 border-[#0e0e0d] shadow-[4px_4px_0px_#0e0e0d]">
         <canvas ref={canvasRef} />
       </div>
       {/* D-Pad */}
-      <div className="grid grid-cols-3 gap-2 w-[180px] mt-2">
+      <div className="grid grid-cols-3 gap-2 w-[180px] mt-4">
         <div />
-        <button onClick={() => movePlayer('up')} className="clay-btn h-14 rounded-2xl text-2xl active:scale-95 transition-transform" aria-label="Move up">▲</button>
+        <BrutalistButton onClick={() => movePlayer('up')} className="h-14 px-0 py-0 text-2xl" aria-label="Move up">▲</BrutalistButton>
         <div />
-        <button onClick={() => movePlayer('left')} className="clay-btn h-14 rounded-2xl text-2xl active:scale-95 transition-transform" aria-label="Move left">◀</button>
+        <BrutalistButton onClick={() => movePlayer('left')} className="h-14 px-0 py-0 text-2xl" aria-label="Move left">◀</BrutalistButton>
         <div className="h-14" />
-        <button onClick={() => movePlayer('right')} className="clay-btn h-14 rounded-2xl text-2xl active:scale-95 transition-transform" aria-label="Move right">▶</button>
+        <BrutalistButton onClick={() => movePlayer('right')} className="h-14 px-0 py-0 text-2xl" aria-label="Move right">▶</BrutalistButton>
         <div />
-        <button onClick={() => movePlayer('down')} className="clay-btn h-14 rounded-2xl text-2xl active:scale-95 transition-transform" aria-label="Move down">▼</button>
+        <BrutalistButton onClick={() => movePlayer('down')} className="h-14 px-0 py-0 text-2xl" aria-label="Move down">▼</BrutalistButton>
         <div />
       </div>
     </div>

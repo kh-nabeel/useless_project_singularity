@@ -202,23 +202,22 @@ export default function SmasherGame({ onWin, qrUrl }: SmasherGameProps) {
   }, [matrix, bugs, cellSize]);
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      <h2 className="text-xl font-bold text-[#5c4a3a]">🔨 Glitch Smasher!</h2>
-      <p className="text-sm text-[#8b7d6b]">
-        Smash {TARGET_SCORE} bugs to repair the code: <strong className="text-[#ff6b6b]">{score}/{TARGET_SCORE}</strong>
+    <div className="flex flex-col items-center gap-4 w-full">
+      <h2 className="font-[family-name:var(--font-rubik)] text-xl text-[#0e0e0d] text-center lowercase">🔨 glitch smasher!</h2>
+      <p className="font-bold text-sm text-[#242525]">
+        Smash {TARGET_SCORE} bugs to repair the code: <strong className="text-[#ea34df]">{score}/{TARGET_SCORE}</strong>
       </p>
       
       {/* Progress bar */}
-      <div className="w-full h-3 bg-[#e8e0d4] rounded-full overflow-hidden mb-2" style={{ boxShadow: 'inset 2px 2px 5px rgba(0,0,0,0.1)' }}>
+      <div className="w-full h-4 bg-white rounded-md border-2 border-[#0e0e0d] shadow-[4px_4px_0px_#0e0e0d] overflow-hidden mb-2">
         <div 
-          className="h-full bg-[#ff6b6b] transition-all duration-300"
+          className="h-full bg-[#ea34df] transition-all duration-300 border-r-2 border-[#0e0e0d]"
           style={{ width: `${(score / TARGET_SCORE) * 100}%` }}
         />
       </div>
 
       <div 
-        className="p-2 bg-white rounded-2xl cursor-pointer touch-none" 
-        style={{ boxShadow: '4px 4px 12px rgba(163,177,198,0.6), -4px -4px 12px rgba(255,255,255,0.8)' }}
+        className="p-2 bg-white rounded-md border-2 border-[#0e0e0d] shadow-[4px_4px_0px_#0e0e0d] cursor-pointer touch-none" 
       >
         <canvas 
           ref={canvasRef} 
@@ -227,7 +226,7 @@ export default function SmasherGame({ onWin, qrUrl }: SmasherGameProps) {
         />
       </div>
       
-      <p className="text-xs text-[#b0a090] mt-2">Tap quickly before they disappear!</p>
+      <p className="font-[family-name:var(--font-nanum)] text-xl text-[#0e0e0d] mt-2">Tap quickly before they disappear!</p>
     </div>
   );
 }

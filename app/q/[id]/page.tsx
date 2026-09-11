@@ -61,7 +61,7 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
       particleCount: 150,
       spread: 80,
       origin: { y: 0.6 },
-      colors: ['#ff6b6b', '#4ecdc4', '#f5c542', '#a8e6a3', '#ff9ff3'],
+      colors: ['#ea34df', '#4ecdc4', '#f5c542', '#a8e6a3', '#0e0e0d'],
     });
 
     // Increment count and redirect
@@ -76,10 +76,10 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-[--clay-bg] flex items-center justify-center">
-        <div className="clay p-8 rounded-[28px] text-center">
+      <main className="min-h-screen bg-white flex items-center justify-center px-4">
+        <div className="brutalist-container p-8 text-center max-w-sm w-full">
           <div className="text-4xl mb-4 animate-bounce">🎮</div>
-          <p className="text-[#5c4a3a] font-semibold text-lg">Loading your challenge...</p>
+          <p className="text-[#0e0e0d] font-[family-name:var(--font-rubik)] text-lg lowercase">loading your challenge...</p>
         </div>
       </main>
     );
@@ -87,13 +87,13 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
 
   if (notFound) {
     return (
-      <main className="min-h-screen bg-[--clay-bg] flex items-center justify-center px-4">
-        <div className="clay p-8 rounded-[28px] text-center max-w-sm">
+      <main className="min-h-screen bg-white flex items-center justify-center px-4">
+        <div className="brutalist-container p-8 text-center max-w-sm w-full">
           <div className="text-6xl mb-4">🕳️</div>
-          <h1 className="text-2xl font-bold text-[#5c4a3a] mb-2">
-            This code leads nowhere... yet
+          <h1 className="font-[family-name:var(--font-rubik)] text-2xl text-[#0e0e0d] mb-2 lowercase">
+            code leads nowhere
           </h1>
-          <p className="text-[#8b7d6b]">
+          <p className="text-[#242525] font-bold">
             The QR code you scanned doesn&apos;t exist. Maybe it was a dream?
           </p>
         </div>
@@ -102,32 +102,32 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
   }
 
   return (
-    <main className="min-h-screen bg-[--clay-bg] flex flex-col items-center justify-center px-4 py-6 relative">
+    <main className="min-h-screen bg-white flex flex-col items-center justify-center px-4 py-6 relative">
       {/* Win overlay */}
       {won && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-          <div className="clay p-10 rounded-[32px] text-center animate-bounce-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#ffffff]/80 backdrop-blur-sm">
+          <div className="brutalist-container p-10 text-center animate-bounce-in max-w-sm w-full mx-4">
             <div className="text-6xl mb-4">🎉</div>
-            <h2 className="text-3xl font-bold text-[#5c4a3a] mb-2">Unlocked!</h2>
-            <p className="text-[#8b7d6b]">Redirecting you now...</p>
+            <h2 className="font-[family-name:var(--font-rubik)] text-3xl text-[#ea34df] mb-2 lowercase">unlocked!</h2>
+            <p className="font-[family-name:var(--font-nanum)] text-2xl text-[#0e0e0d]">redirecting you now...</p>
           </div>
         </div>
       )}
 
       {/* Header */}
-      <div className="text-center mb-4">
-        <p className="text-sm text-[#8b7d6b] font-medium">
+      <div className="text-center mb-6">
+        <p className="font-[family-name:var(--font-rubik)] text-sm text-[#0e0e0d] uppercase">
           🔒 Complete the challenge to unlock your link
         </p>
         {qrData?.label && (
-          <p className="text-xs text-[#b0a090] mt-1">
-            Destination: {qrData.label}
+          <p className="font-[family-name:var(--font-nanum)] text-xl text-[#ea34df] mt-2">
+            destination: {qrData.label}
           </p>
         )}
       </div>
 
       {/* Game container */}
-      <div className="clay p-6 rounded-[28px] w-full max-w-lg">
+      <div className="brutalist-container p-4 sm:p-6 w-full max-w-lg">
         {game === 'maze' && <MazeGame onWin={handleWin} qrUrl={`${window.location.origin}/q/${id}`} />}
         {game === 'chase' && <ChaseGame onWin={handleWin} qrUrl={`${window.location.origin}/q/${id}`} />}
         {game === 'smasher' && <SmasherGame onWin={handleWin} qrUrl={`${window.location.origin}/q/${id}`} />}
