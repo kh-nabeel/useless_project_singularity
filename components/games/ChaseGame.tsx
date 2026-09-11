@@ -38,19 +38,35 @@ export default function ChaseGame({ onWin, qrUrl }: ChaseGameProps) {
     // Ghost starts in the bottom right corner (the hollowed out area)
     setGhost({ row: size - 5, col: size - 5 });
     
-    // Initialize dots on all white cells
+    // Flood fill to find all accessible white cells from player start (4,4)
+    const accessible = Array.from({ length: size }, () => Array(size).fill(false));
+    const q: {r: number, c: number}[] = [{ r: 4, c: 4 }];
+    accessible[4][4] = true;
+    
+    while (q.length > 0) {
+      const curr = q.shift()!;
+      const dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+      for (const [dr, dc] of dirs) {
+        const nr = curr.r + dr;
+        const nc = curr.c + dc;
+        if (nr >= 0 && nr < size && nc >= 0 && nc < size && !m[nr][nc] && !accessible[nr][nc]) {
+          accessible[nr][nc] = true;
+          q.push({ r: nr, c: nc });
+        }
+      }
+    }
+
+    // Initialize dots sparsely only on accessible white cells
     let dotCount = 0;
     const initialDots: boolean[][] = [];
     for (let r = 0; r < size; r++) {
       const rowDots: boolean[] = [];
       for (let c = 0; c < size; c++) {
-        // Dot on false (white) modules, except player start and ghost start
-        const isWhite = !m[r][c];
         const isStart = (r >= 2 && r <= 6 && c >= 2 && c <= 6);
         const isGhost = (r >= size - 7 && r <= size - 3 && c >= size - 7 && c <= size - 3);
         
-        // Let's only place dots in corridors, not in the big spawn/exit boxes
-        const hasDot = isWhite && !isStart && !isGhost;
+        // Place dots only in accessible corridors (not in spawn/exit boxes) with some sparsity
+        const hasDot = accessible[r][c] && !isStart && !isGhost && Math.random() > 0.6;
         rowDots.push(hasDot);
         if (hasDot) dotCount++;
       }

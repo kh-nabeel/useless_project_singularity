@@ -8,14 +8,20 @@ import { Maze, Cell } from './maze';
  */
 export function generateQRMatrix(url: string): boolean[][] {
   const qr = qrcode.create(url, { errorCorrectionLevel: 'M' });
-  const size = qr.modules.size;
+  const originalSize = qr.modules.size;
   const data = qr.modules.data;
+  const margin = 2;
+  const size = originalSize + margin * 2;
   
   let matrix: boolean[][] = [];
   for (let r = 0; r < size; r++) {
     const row: boolean[] = [];
     for (let c = 0; c < size; c++) {
-      row.push(data[r * size + c] === 1);
+      if (r >= margin && r < size - margin && c >= margin && c < size - margin) {
+        row.push(data[(r - margin) * originalSize + (c - margin)] === 1);
+      } else {
+        row.push(false); // White margin
+      }
     }
     matrix.push(row);
   }

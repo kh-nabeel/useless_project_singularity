@@ -97,19 +97,15 @@ export default function ImposterGame({ onWin, qrUrl }: ImposterGameProps) {
     const c = Math.floor(x / cellSize);
     const r = Math.floor(y / cellSize);
 
-    // Check if we hit an unfound imposter (with a bit of margin for fat fingers)
     setImposters(prev => {
-      const next = [...prev];
       let changed = false;
-      
-      for (let i = 0; i < next.length; i++) {
-        if (!next[i].found) {
-          if (Math.abs(next[i].row - r) <= 1 && Math.abs(next[i].col - c) <= 1) {
-            next[i].found = true;
-            changed = true;
-          }
+      const next = prev.map(imp => {
+        if (!imp.found && Math.abs(imp.row - r) <= 1 && Math.abs(imp.col - c) <= 1) {
+          changed = true;
+          return { ...imp, found: true };
         }
-      }
+        return imp;
+      });
       
       if (changed) {
         if (next.every(imp => imp.found)) {
