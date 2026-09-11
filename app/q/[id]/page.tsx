@@ -7,9 +7,10 @@ import confetti from 'canvas-confetti';
 // Dynamic imports to avoid SSR issues with canvas
 const MazeGame = dynamic(() => import('@/components/games/MazeGame'), { ssr: false });
 const ChaseGame = dynamic(() => import('@/components/games/ChaseGame'), { ssr: false });
-const FitGame = dynamic(() => import('@/components/games/FitGame'), { ssr: false });
+const SmasherGame = dynamic(() => import('@/components/games/SmasherGame'), { ssr: false });
+const ImposterGame = dynamic(() => import('@/components/games/ImposterGame'), { ssr: false });
 
-type GameType = 'maze' | 'chase' | 'fit';
+type GameType = 'maze' | 'chase' | 'smasher' | 'imposter';
 
 interface QrData {
   id: string;
@@ -38,7 +39,7 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
         setQrData(data);
 
         // Pick random game
-        const games: GameType[] = ['maze', 'chase', 'fit'];
+        const games: GameType[] = ['maze', 'chase', 'smasher', 'imposter'];
         const chosen = games[Math.floor(Math.random() * games.length)];
         setGame(chosen);
       } catch {
@@ -127,9 +128,10 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
 
       {/* Game container */}
       <div className="clay p-6 rounded-[28px] w-full max-w-lg">
-        {game === 'maze' && <MazeGame onWin={handleWin} />}
-        {game === 'chase' && <ChaseGame onWin={handleWin} />}
-        {game === 'fit' && <FitGame onWin={handleWin} />}
+        {game === 'maze' && <MazeGame onWin={handleWin} qrUrl={`${window.location.origin}/q/${id}`} />}
+        {game === 'chase' && <ChaseGame onWin={handleWin} qrUrl={`${window.location.origin}/q/${id}`} />}
+        {game === 'smasher' && <SmasherGame onWin={handleWin} qrUrl={`${window.location.origin}/q/${id}`} />}
+        {game === 'imposter' && <ImposterGame onWin={handleWin} qrUrl={`${window.location.origin}/q/${id}`} />}
       </div>
     </main>
   );

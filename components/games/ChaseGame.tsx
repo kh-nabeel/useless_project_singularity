@@ -1,127 +1,162 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { generateQRMatrix } from '@/lib/qrMatrix';
 
 interface ChaseGameProps {
   onWin: () => void;
+  qrUrl: string;
 }
-
-const GRID = 10;
-const CELL = 36;
 
 interface Pos {
   row: number;
   col: number;
 }
 
-// Generate a simple open grid with scattered walls
-function generateLevel(): { walls: boolean[][]; dots: boolean[][] } {
-  const walls: boolean[][] = [];
-  const dots: boolean[][] = [];
-
-  for (let r = 0; r < GRID; r++) {
-    walls.push([]);
-    dots.push([]);
-    for (let c = 0; c < GRID; c++) {
-      // Border walls + scattered interior walls (~15%)
-      const isBorder = r === 0 || r === GRID - 1 || c === 0 || c === GRID - 1;
-      const isWall = isBorder
-        ? false
-        : Math.random() < 0.15 && !(r <= 1 && c <= 1) && !(r >= GRID - 2 && c >= GRID - 2);
-      walls[r].push(isWall);
-      dots[r].push(!isWall); // dots on all non-wall cells
-    }
-  }
-
-  // Clear player start and ghost start
-  dots[0][0] = false;
-  dots[GRID - 1][GRID - 1] = false;
-
-  return { walls, dots };
-}
-
-export default function ChaseGame({ onWin }: ChaseGameProps) {
+export default function ChaseGame({ onWin, qrUrl }: ChaseGameProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [level] = useState(() => generateLevel());
-  const [player, setPlayer] = useState<Pos>({ row: 0, col: 0 });
-  const [ghost, setGhost] = useState<Pos>({ row: GRID - 1, col: GRID - 1 });
-  const [dots, setDots] = useState<boolean[][]>(level.dots.map((r) => [...r]));
-  const [dotsLeft, setDotsLeft] = useState(() =>
-    level.dots.flat().filter(Boolean).length
-  );
+  const [matrix, setMatrix] = useState<boolean[][] | null>(null);
+  const [player, setPlayer] = useState<Pos>({ row: 4, col: 4 });
+  const [ghost, setGhost] = useState<Pos>({ row: 10, col: 10 });
+  const [dots, setDots] = useState<boolean[][]>([]);
+  const [dotsLeft, setDotsLeft] = useState(0);
+  const [cellSize, setCellSize] = useState(12);
+
   const ghostRef = useRef(ghost);
   const playerRef = useRef(player);
 
+  useEffect(() => { ghostRef.current = ghost; }, [ghost]);
+  useEffect(() => { playerRef.current = player; }, [player]);
+
+  // Generate QR Maze on mount
   useEffect(() => {
-    ghostRef.current = ghost;
-  }, [ghost]);
+    const m = generateQRMatrix(qrUrl);
+    setMatrix(m);
+    setPlayer({ row: 4, col: 4 });
+    const size = m.length;
+    
+    // Ghost starts in the bottom right corner (the hollowed out area)
+    setGhost({ row: size - 5, col: size - 5 });
+    
+    // Initialize dots on all white cells
+    let dotCount = 0;
+    const initialDots: boolean[][] = [];
+    for (let r = 0; r < size; r++) {
+      const rowDots: boolean[] = [];
+      for (let c = 0; c < size; c++) {
+        // Dot on false (white) modules, except player start and ghost start
+        const isWhite = !m[r][c];
+        const isStart = (r >= 2 && r <= 6 && c >= 2 && c <= 6);
+        const isGhost = (r >= size - 7 && r <= size - 3 && c >= size - 7 && c <= size - 3);
+        
+        // Let's only place dots in corridors, not in the big spawn/exit boxes
+        const hasDot = isWhite && !isStart && !isGhost;
+        rowDots.push(hasDot);
+        if (hasDot) dotCount++;
+      }
+      initialDots.push(rowDots);
+    }
+    setDots(initialDots);
+    setDotsLeft(dotCount);
+  }, [qrUrl]);
+
+  // Responsive cell size
   useEffect(() => {
-    playerRef.current = player;
-  }, [player]);
+    if (!matrix) return;
+    const updateSize = () => {
+      const size = matrix.length;
+      const maxW = Math.min(window.innerWidth - 40, 400);
+      const maxH = Math.min(window.innerHeight - 200, 400);
+      const s = Math.floor(Math.min(maxW / size, maxH / size));
+      setCellSize(Math.max(s, 8));
+    };
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, [matrix]);
 
   // Draw
   useEffect(() => {
+    if (!matrix || !canvasRef.current) return;
     const canvas = canvasRef.current;
-    if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const w = GRID * CELL;
+    const size = matrix.length;
+    const w = size * cellSize;
+    const h = size * cellSize;
     canvas.width = w;
-    canvas.height = w;
+    canvas.height = h;
 
-    // Background
-    ctx.fillStyle = '#1a1a2e';
-    ctx.fillRect(0, 0, w, w);
-
-    // Draw grid
-    for (let r = 0; r < GRID; r++) {
-      for (let c = 0; c < GRID; c++) {
-        const x = c * CELL;
-        const y = r * CELL;
-
-        if (level.walls[r][c]) {
-          ctx.fillStyle = '#16213e';
-          ctx.fillRect(x + 1, y + 1, CELL - 2, CELL - 2);
+    // Background (White modules)
+    ctx.fillStyle = '#1a1a2e'; // Dark cyber theme
+    ctx.fillRect(0, 0, w, h);
+    
+    // Draw walls (Black modules)
+    ctx.fillStyle = '#0f3460';
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        if (matrix[r][c]) {
+          ctx.fillRect(c * cellSize, r * cellSize, cellSize, cellSize);
         }
-
-        // Dots
-        if (dots[r][c]) {
-          ctx.fillStyle = '#f5c542';
+      }
+    }
+    
+    // Draw dots
+    ctx.fillStyle = '#e94560';
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        if (dots[r] && dots[r][c]) {
           ctx.beginPath();
-          ctx.arc(x + CELL / 2, y + CELL / 2, 4, 0, Math.PI * 2);
+          ctx.arc(c * cellSize + cellSize / 2, r * cellSize + cellSize / 2, cellSize * 0.25, 0, Math.PI * 2);
           ctx.fill();
         }
       }
     }
 
     // Draw ghost
-    const gx = ghost.col * CELL + CELL / 2;
-    const gy = ghost.row * CELL + CELL / 2;
+    const gx = ghost.col * cellSize + cellSize / 2;
+    const gy = ghost.row * cellSize + cellSize / 2;
     ctx.fillStyle = '#e74c3c';
-    ctx.font = `${CELL * 0.7}px sans-serif`;
+    ctx.font = `${cellSize * 1.5}px sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('👻', gx, gy);
+    ctx.fillText('👾', gx, gy);
 
     // Draw player
-    const px = player.col * CELL + CELL / 2;
-    const py = player.row * CELL + CELL / 2;
-    ctx.fillText('😋', px, py);
-  }, [player, ghost, dots, level]);
+    const px = player.col * cellSize + cellSize / 2;
+    const py = player.row * cellSize + cellSize / 2;
+    ctx.fillStyle = '#4ecdc4';
+    ctx.beginPath();
+    ctx.arc(px, py, cellSize * 0.4, 0, Math.PI * 2);
+    ctx.fill();
+
+  }, [matrix, player, ghost, dots, cellSize]);
 
   // Move player
   const movePlayer = useCallback(
     (dir: 'up' | 'down' | 'left' | 'right') => {
+      if (!matrix) return;
+      const size = matrix.length;
+      
       setPlayer((prev) => {
         let { row, col } = prev;
-        if (dir === 'up' && row > 0 && !level.walls[row - 1][col]) row--;
-        else if (dir === 'down' && row < GRID - 1 && !level.walls[row + 1][col]) row++;
-        else if (dir === 'left' && col > 0 && !level.walls[row][col - 1]) col--;
-        else if (dir === 'right' && col < GRID - 1 && !level.walls[row][col + 1]) col++;
+        
+        let nr = row;
+        let nc = col;
+        
+        if (dir === 'up' && row > 0) nr--;
+        else if (dir === 'down' && row < size - 1) nr++;
+        else if (dir === 'left' && col > 0) nc--;
+        else if (dir === 'right' && col < size - 1) nc++;
+
+        if (!matrix[nr][nc]) {
+          row = nr;
+          col = nc;
+        }
 
         // Eat dot
-        if (dots[row][col]) {
+        if (dots[row] && dots[row][col]) {
           const newDots = dots.map((r) => [...r]);
           newDots[row][col] = false;
           setDots(newDots);
@@ -135,11 +170,14 @@ export default function ChaseGame({ onWin }: ChaseGameProps) {
         return { row, col };
       });
     },
-    [dots, dotsLeft, level, onWin]
+    [matrix, dots, dotsLeft, onWin]
   );
 
-  // Ghost AI — moves every 400ms
+  // Ghost AI
   useEffect(() => {
+    if (!matrix) return;
+    const size = matrix.length;
+    
     const interval = setInterval(() => {
       setGhost((prev) => {
         const p = playerRef.current;
@@ -148,7 +186,7 @@ export default function ChaseGame({ onWin }: ChaseGameProps) {
         const directions: Pos[] = [];
 
         const tryAdd = (r: number, c: number) => {
-          if (r >= 0 && r < GRID && c >= 0 && c < GRID && !level.walls[r][c]) {
+          if (r >= 0 && r < size && c >= 0 && c < size && !matrix[r][c]) {
             directions.push({ row: r, col: c });
           }
         };
@@ -178,14 +216,17 @@ export default function ChaseGame({ onWin }: ChaseGameProps) {
       setTimeout(() => {
         const g = ghostRef.current;
         const p = playerRef.current;
-        if (g.row === p.row && g.col === p.col) {
-          setPlayer({ row: 0, col: 0 });
+        if (Math.abs(g.row - p.row) <= 1 && Math.abs(g.col - p.col) <= 1) {
+           // To be forgiving, only kill if they are exactly on same tile
+           if (g.row === p.row && g.col === p.col) {
+              setPlayer({ row: 4, col: 4 });
+           }
         }
       }, 50);
     }, 400);
 
     return () => clearInterval(interval);
-  }, [level]);
+  }, [matrix]);
 
   // Keyboard
   useEffect(() => {
@@ -203,20 +244,15 @@ export default function ChaseGame({ onWin }: ChaseGameProps) {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <h2 className="text-xl font-bold text-[#5c4a3a]">👾 Eat All the Dots!</h2>
+      <h2 className="text-xl font-bold text-[#5c4a3a]">👾 Eat the Data Packets!</h2>
       <p className="text-sm text-[#8b7d6b]">
-        Avoid the ghost! {dotsLeft} dots left
+        Avoid the glitch bug! {dotsLeft} packets left
       </p>
-      <canvas
-        ref={canvasRef}
-        className="rounded-2xl"
-        style={{
-          boxShadow:
-            '4px 4px 12px rgba(163,177,198,0.6), -4px -4px 12px rgba(255,255,255,0.8)',
-        }}
-      />
+      <div className="p-2 bg-[#1a1a2e] rounded-2xl" style={{ boxShadow: '4px 4px 12px rgba(163,177,198,0.6), -4px -4px 12px rgba(255,255,255,0.8)' }}>
+        <canvas ref={canvasRef} />
+      </div>
       {/* D-Pad */}
-      <div className="grid grid-cols-3 gap-2 w-[180px]">
+      <div className="grid grid-cols-3 gap-2 w-[180px] mt-2">
         <div />
         <button onClick={() => movePlayer('up')} className="clay-btn h-14 rounded-2xl text-2xl active:scale-95 transition-transform" aria-label="Move up">▲</button>
         <div />

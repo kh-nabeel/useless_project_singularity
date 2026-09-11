@@ -9,7 +9,7 @@
 ### Team Name: Singularity
 
 ### Project Description
-A web app where QR codes don't go straight to the destination. Instead, scanning one opens a random mini-game — a maze, a dot-chase, or a block-fit puzzle. Only after winning does the player get redirected to the real URL!
+A web app where QR codes don't go straight to the destination. Instead, scanning one opens a random mini-game built directly into the QR code matrix. Only after winning does the player get redirected to the real URL!
 
 ### The Problem (that doesn't exist)
 QR codes are just *too easy* to use. You scan, you go. Where's the thrill? The challenge? The existential dread?
@@ -45,16 +45,17 @@ We put a fun mini-game between the scan and the destination. Want that link? **E
 
 1. **Generate** — Paste any URL on `/create`, get a QR code that encodes `our-site.com/q/{id}`
 2. **Scan** — Anyone scans it with their phone camera (or use `/scan` for demo)
-3. **Play** — A random game appears: maze escape, dot chase, or block-fit puzzle
+3. **Play** — A random game appears built directly inside the live QR code matrix
 4. **Unlock** — Win the game → confetti 🎉 → redirect to the real destination!
 
-### The Three Games
+### The QR Matrix Mini-Games
 
 | Game | Description | Controls |
 |------|-------------|----------|
-| 🏰 Maze | Navigate an 8×8 maze to reach the star | Arrow keys + on-screen D-pad |
-| 👾 Chase | Eat all dots while avoiding a ghost | Arrow keys + on-screen D-pad |
-| 🧩 Block Fit | Place tetromino pieces to fill a target shape | Tap to select, rotate, place |
+| 🏰 QR Maze | Navigate through the actual QR code labyrinth to the exit portal | Arrow keys + on-screen D-pad |
+| 👾 QR Chase | Collect energy dots across the QR matrix while dodging glitch bots | Arrow keys + on-screen D-pad |
+| 🔨 Module Smasher | Squash glitched animated bug modules corrupting the QR code | Click / Tap |
+| 🕵️ Imposter Block | Spot and tap 3 sneaky imposters camouflaged within the QR pattern | Click / Tap |
 
 ## Setup & Installation
 

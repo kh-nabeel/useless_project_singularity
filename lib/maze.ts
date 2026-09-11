@@ -4,6 +4,7 @@
 export interface Cell {
   row: number;
   col: number;
+  isWall?: boolean;
   walls: { top: boolean; right: boolean; bottom: boolean; left: boolean };
   visited: boolean;
 }
