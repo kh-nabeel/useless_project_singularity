@@ -1,103 +1,137 @@
-<img width="1280" height="640" alt="git (1)" src="https://github.com/user-attachments/assets/8920b256-2ba8-4988-b824-5351134eb4bd" />
+<img width="1280" height="640" alt="QR Quest Banner" src="https://github.com/user-attachments/assets/8920b256-2ba8-4988-b824-5351134eb4bd" />
 
+# QR Quest 🎮🔒
 
-
-# [Project Name] 🎯
-
+**Game-Gated QR Codes** — Generate QR codes that challenge scanners with a mini-game before revealing the destination!
 
 ## Basic Details
-### Team Name: [Name]
 
-
-### Team Members
-- Team Lead: [Name] - [College]
-- Member 2: [Name] - [College]
-- Member 3: [Name] - [College]
+### Team Name: Singularity
 
 ### Project Description
-[2-3 lines about what your project does]
+A web app where QR codes don't go straight to the destination. Instead, scanning one opens a random mini-game — a maze, a dot-chase, or a block-fit puzzle. Only after winning does the player get redirected to the real URL!
 
 ### The Problem (that doesn't exist)
-[What ridiculous problem are you solving?]
+QR codes are just *too easy* to use. You scan, you go. Where's the thrill? The challenge? The existential dread?
 
 ### The Solution (that nobody asked for)
-[How are you solving it? Keep it fun!]
+We put a fun mini-game between the scan and the destination. Want that link? **Earn it.** 🏆
 
 ## Technical Details
+
 ### Technologies/Components Used
-For Software:
-- [Languages used]
-- [Frameworks used]
-- [Libraries used]
-- [Tools used]
 
-For Hardware:
-- [List main components]
-- [List specifications]
-- [List tools required]
+**Languages:** TypeScript, CSS
+**Framework:** Next.js 16 (App Router)
+**Libraries:**
+- `@supabase/supabase-js` — Postgres database
+- `qrcode.react` — QR code generation
+- `html5-qrcode` — In-browser QR scanning
+- `canvas-confetti` — Win celebration effects
+- `lucide-react` — Icons
+- `tailwindcss` v4 — Styling
 
-### Implementation
-For Software:
-# Installation
-[commands]
+**Tools:** Vercel (hosting), Supabase (database)
 
-# Run
-[commands]
+## How It Works
 
-### Project Documentation
-For Software:
+```
+┌──────────────┐     ┌───────────────┐     ┌──────────────┐     ┌──────────────┐
+│   /create    │     │   Scan QR     │     │  /q/{id}     │     │ Destination  │
+│              │────▶│  with phone   │────▶│  Play game!  │────▶│    URL       │
+│ Generate QR  │     │   camera      │     │ 🏰🎮🧩      │     │  🎉🔓       │
+└──────────────┘     └───────────────┘     └──────────────┘     └──────────────┘
+```
 
-# Screenshots (Add at least 3)
-![Screenshot1](Add screenshot 1 here with proper name)
-*Add caption explaining what this shows*
+1. **Generate** — Paste any URL on `/create`, get a QR code that encodes `our-site.com/q/{id}`
+2. **Scan** — Anyone scans it with their phone camera (or use `/scan` for demo)
+3. **Play** — A random game appears: maze escape, dot chase, or block-fit puzzle
+4. **Unlock** — Win the game → confetti 🎉 → redirect to the real destination!
 
-![Screenshot2](Add screenshot 2 here with proper name)
-*Add caption explaining what this shows*
+### The Three Games
 
-![Screenshot3](Add screenshot 3 here with proper name)
-*Add caption explaining what this shows*
+| Game | Description | Controls |
+|------|-------------|----------|
+| 🏰 Maze | Navigate an 8×8 maze to reach the star | Arrow keys + on-screen D-pad |
+| 👾 Chase | Eat all dots while avoiding a ghost | Arrow keys + on-screen D-pad |
+| 🧩 Block Fit | Place tetromino pieces to fill a target shape | Tap to select, rotate, place |
 
-# Diagrams
-![Workflow](Add your workflow/architecture diagram here)
-*Add caption explaining your workflow*
+## Setup & Installation
 
-For Hardware:
+### Prerequisites
+- Node.js 18+
+- A [Supabase](https://supabase.com) project (free tier)
 
-# Schematic & Circuit
-![Circuit](Add your circuit diagram here)
-*Add caption explaining connections*
+### Database Setup
+Run this SQL in Supabase's SQL Editor:
 
-![Schematic](Add your schematic diagram here)
-*Add caption explaining the schematic*
+```sql
+create table qr_codes (
+  id text primary key default substr(md5(random()::text), 1, 6),
+  destination_url text not null,
+  label text,
+  created_at timestamptz default now(),
+  completed_count int default 0
+);
 
-# Build Photos
-![Components](Add photo of your components here)
-*List out all components shown*
+alter table qr_codes enable row level security;
+create policy "public read" on qr_codes for select using (true);
+create policy "public insert" on qr_codes for insert with check (true);
+create policy "public update count" on qr_codes for update using (true);
+```
 
-![Build](Add photos of build process here)
-*Explain the build steps*
+### Installation
 
-![Final](Add photo of final product here)
-*Explain the final build*
+```bash
+# Clone the repo
+git clone https://github.com/your-username/useless_project_singularity.git
+cd useless_project_singularity
 
-### Project Demo
-# Video
-[Add your demo video link here]
-*Explain what the video demonstrates*
+# Install dependencies
+npm install
 
-# Additional Demos
-[Add any extra demo materials/links]
+# Set up environment variables
+cp .env.local.example .env.local
+# Edit .env.local with your Supabase URL and anon key
+
+# Run dev server
+npm run dev
+```
+
+### Environment Variables (.env.local)
+
+```
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
+
+### Deploy to Vercel
+
+1. Push to GitHub
+2. Import the repo on [Vercel](https://vercel.com)
+3. Add the three environment variables in Vercel's dashboard
+4. Update `NEXT_PUBLIC_SITE_URL` to your deployed URL
+5. Redeploy
+
+## Project Documentation
+
+### Screenshots
+
+![Landing Page](screenshots/landing.png)
+*The QR Quest landing page with claymorphism design*
+
+![Create QR](screenshots/create.png)
+*Generate a game-gated QR code for any URL*
+
+![Game Challenge](screenshots/game.png)
+*One of three random mini-games appears when scanning the QR*
 
 ## Team Contributions
-- [Name 1]: [Specific contributions]
-- [Name 2]: [Specific contributions]
-- [Name 3]: [Specific contributions]
+- Built with ❤️ for the hackathon
 
 ---
-Made with ❤️ at TinkerHub Useless Projects 
+Made with ❤️ at TinkerHub Useless Projects
 
 ![Static Badge](https://img.shields.io/badge/TinkerHub-24?color=%23000000&link=https%3A%2F%2Fwww.tinkerhub.org%2F)
 ![Static Badge](https://img.shields.io/badge/UselessProjects--26-26?link=https%3A%2F%2Ftinkerhub.org%2Fevents%2F1M8ORET9A1%2Fuseless-projects-3.0)
-
-
-
