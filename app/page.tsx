@@ -7,7 +7,7 @@ export default function HomePage() {
       
       {/* Handwriting Subtitle top */}
       <p className="font-[family-name:var(--font-nanum)] text-[#100f0f] text-2xl mb-4 text-center">
-        exclusive to Tinkerhub campus community &lt;3
+        turn your ordinary links into playable mini-games &lt;3
       </p>
 
       {/* Hero */}

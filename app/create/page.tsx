@@ -38,7 +38,7 @@ export default function CreatePage() {
       }
 
       const { id } = await res.json();
-      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
+      const siteUrl = window.location.origin;
       setQrUrl(`${siteUrl}/q/${id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');

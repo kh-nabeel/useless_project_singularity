@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
 import { ArrowLeft, Camera, ExternalLink, Upload } from 'lucide-react';
 import Link from 'next/link';
+import { BrutalistButton } from '@/components/ui/BrutalistButton';
 
 export default function ScanPage() {
   const [scanning, setScanning] = useState(false);
@@ -95,7 +96,7 @@ export default function ScanPage() {
 
   const isOurDomain = (url: string) => {
     try {
-      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
+      const siteUrl = window.location.origin;
       return url.startsWith(siteUrl);
     } catch {
       return false;
@@ -114,32 +115,29 @@ export default function ScanPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[--clay-bg] flex flex-col items-center px-4 py-8">
+    <main className="min-h-screen bg-white flex flex-col items-center px-4 py-8">
       <div className="w-full max-w-md">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-[#5c4a3a] mb-6 hover:opacity-70 transition-opacity"
+          className="inline-flex items-center gap-2 text-[#0e0e0d] mb-6 font-bold hover:underline"
         >
           <ArrowLeft size={20} />
           Back
         </Link>
 
-        <div className="clay p-8">
+        <div className="brutalist-container p-8">
           <div className="flex items-center gap-3 mb-6">
-            <Camera size={32} className="text-[#4ecdc4]" />
-            <h1 className="text-2xl font-bold text-[#5c4a3a]">Scan a QR Code</h1>
+            <Camera size={32} className="text-[#ea34df]" />
+            <h1 className="font-[family-name:var(--font-rubik)] text-2xl text-[#0e0e0d] lowercase">Scan a QR Code</h1>
           </div>
 
           {/* Scanner container */}
           <div
             id="qr-reader"
             ref={containerRef}
-            className="w-full rounded-2xl overflow-hidden mb-4"
+            className="w-full rounded-md overflow-hidden mb-4 border-2 border-[#0e0e0d]"
             style={{
               minHeight: scanning ? '300px' : '0',
-              boxShadow: scanning
-                ? 'inset 4px 4px 8px rgba(163,177,198,0.6), inset -4px -4px 8px rgba(255,255,255,0.8)'
-                : 'none',
             }}
           />
 
@@ -153,61 +151,58 @@ export default function ScanPage() {
 
           {!scanning && !result && (
             <div className="flex flex-col gap-3">
-              <button
+              <BrutalistButton
                 onClick={startScanning}
-                className="clay-btn w-full py-4 rounded-2xl text-lg font-bold text-[#5c4a3a] active:scale-[0.98] transition-transform flex items-center justify-center gap-2"
+                className="w-full flex items-center justify-center gap-2 bg-[#ea34df] hover:bg-[#d02bc5]"
               >
                 <Camera size={20} />
                 Start Scanner
-              </button>
-              <button
+              </BrutalistButton>
+              <BrutalistButton
                 onClick={() => fileInputRef.current?.click()}
-                className="clay-btn w-full py-4 rounded-2xl text-lg font-bold text-[#5c4a3a] active:scale-[0.98] transition-transform flex items-center justify-center gap-2"
+                className="w-full flex items-center justify-center gap-2 bg-white text-[#0e0e0d] hover:bg-gray-100"
               >
                 <Upload size={20} />
                 Upload QR Image
-              </button>
+              </BrutalistButton>
             </div>
           )}
 
           {scanning && (
-            <button
+            <BrutalistButton
               onClick={stopScanning}
-              className="clay-btn w-full py-4 rounded-2xl text-lg font-bold text-red-500 active:scale-[0.98] transition-transform"
+              className="w-full mt-4 flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 border-red-900"
             >
               Stop Scanner
-            </button>
+            </BrutalistButton>
           )}
 
           {error && (
-            <p className="text-red-500 text-sm bg-red-50 p-3 rounded-xl mt-4">{error}</p>
+            <p className="text-[#ffffff] text-sm bg-red-600 font-bold p-3 rounded-md border-2 border-[#0e0e0d] shadow-[4px_4px_0px_#0e0e0d] mt-4">{error}</p>
           )}
 
           {result && (
-            <div className="mt-4 p-4 rounded-2xl" style={{
-              background: '#e8e0d4',
-              boxShadow: 'inset 3px 3px 6px rgba(163,177,198,0.4), inset -3px -3px 6px rgba(255,255,255,0.6)',
-            }}>
-              <p className="text-sm text-[#8b7d6b] mb-2 font-semibold">Decoded:</p>
-              <p className="text-[#5c4a3a] break-all text-sm mb-3">{result}</p>
+            <div className="mt-4 p-4 rounded-md border-2 border-[#0e0e0d] bg-[#f8f9fa] shadow-[4px_4px_0px_#0e0e0d]">
+              <p className="text-sm font-bold text-[#0e0e0d] mb-2 uppercase">Decoded:</p>
+              <p className="text-[#242525] font-[family-name:var(--font-nanum)] break-all text-xl mb-5">{result}</p>
 
-              <div className="flex gap-3">
-                <button
+              <div className="flex flex-col sm:flex-row gap-3">
+                <BrutalistButton
                   onClick={handleResultAction}
-                  className="clay-btn flex-1 py-3 rounded-2xl font-semibold text-[#5c4a3a] flex items-center justify-center gap-2 active:scale-95 transition-transform"
+                  className="flex-1 flex items-center justify-center gap-2 bg-[#ea34df] hover:bg-[#d02bc5]"
                 >
                   <ExternalLink size={16} />
                   {isOurDomain(result) ? 'Play Game' : 'Open Link'}
-                </button>
-                <button
+                </BrutalistButton>
+                <BrutalistButton
                   onClick={() => {
                     setResult(null);
                     startScanning();
                   }}
-                  className="clay-btn py-3 px-5 rounded-2xl font-semibold text-[#5c4a3a] active:scale-95 transition-transform"
+                  className="flex-1 flex items-center justify-center gap-2 bg-white text-[#0e0e0d] hover:bg-gray-100"
                 >
                   Scan Again
-                </button>
+                </BrutalistButton>
               </div>
             </div>
           )}

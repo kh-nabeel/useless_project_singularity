@@ -26,7 +26,8 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ id: data.id });
-  } catch {
-    return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
+  } catch (err) {
+    console.error('API /qr error:', err);
+    return NextResponse.json({ error: 'Internal server error or invalid configuration' }, { status: 500 });
   }
 }
