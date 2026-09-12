@@ -120,48 +120,48 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 
 ### Demo Video
 
-![Demo Video Placeholder]([Link to QR quest Demo video.mp4])
+![Demo Video](https://drive.google.com/file/d/1yxI98YxmLmheHQ_4msBLKHU6qq3CAwfR/view?usp=drive_link)
 *Watch the QR Quest Demo Video*
 
 ### Screenshots
 
 **Landing Page**
-![Landing Page]([Link to Landing page])
+![Landing Page](https://drive.google.com/file/d/17E1wgNnkp-R7SDti2D7VHETEOpsuUcNc/view?usp=drive_link)
 *The QR Quest landing page with brutalist design*
 
 **Create QR Code**
-![Create QR code]([Link to Create QR code])
+![Create QR code](https://drive.google.com/file/d/17fpcsaAIEhYH4xXF7lfDSKQPTDCzXMvx/view?usp=drive_link)
 *Generate a game-gated QR code for any URL*
 
 **Scan a QR Code**
-![Scan a QR code]([Link to Scan a QR code])
+![Scan a QR code](https://drive.google.com/file/d/1UokqSeaXTK5JAHKVrWvvm5zaJBH4MnQd/view?usp=drive_link)
 *Scan QR code page*
 
 **Scan a QR code camera option**
-![Scan a QR code camera option]([Link to Scan a QR code camera option])
+![Scan a QR code camera option](https://drive.google.com/file/d/1RCgc9cdXk714oxllYw7NfdIHEILD7z-U/view?usp=drive_link)
 *Using the camera to scan a QR code*
 
 **Game Challenge - QR Maze**
-![Game challenge - QR maze]([Link to Game challenge - QR maze])
+![Game challenge - QR maze](https://drive.google.com/file/d/1ZW9KJ8v9SwDjRhl_tDkc20AKTcbTo3Fl/view?usp=drive_link)
 *Navigate through the actual QR code labyrinth*
 
 **Game Challenge - Chase**
-![Game challenge - Chase]([Link to Game challenge - Chase])
+![Game challenge - Chase](https://drive.google.com/file/d/1IVnx3Xfyg9XWm4EreuiCyWsMtgRP_Y2J/view?usp=drive_link)
 *Collect energy dots across the QR matrix*
 
 **Game Challenge - Glitch Smasher**
-![Game challenge - Glitch smasher]([Link to Game challenge - Glitch smasher])
+![Game challenge - Glitch smasher](https://drive.google.com/file/d/1oaXJrPr6k2GhLHTmRO04i1iC6dO78IwP/view?usp=drive_link)
 *Squash glitched animated bug modules*
 
 **Game Challenge - Imposters**
-![Game challenge - Imposters]([Link to Game challenge - Imposters])
+![Game challenge - Imposters](https://drive.google.com/file/d/1BHce6uEvSuSzxzbKzKzz6yYeAIqRzFT_/view?usp=drive_link)
 *Spot and tap sneaky imposters camouflaged within the QR pattern*
 
 ## Team Contributions
-- Built with ❤️ for the hackathon
+- Built with ❤️ for the Useless Projects
 
 ---
-Made with ❤️ at TinkerHub Useless Projects
+Made with ❤️ at TinkerHub Useless Projects @ NSSCE
 
 ![Static Badge](https://img.shields.io/badge/TinkerHub-24?color=%23000000&link=https%3A%2F%2Fwww.tinkerhub.org%2F)
 ![Static Badge](https://img.shields.io/badge/UselessProjects--26-26?link=https%3A%2F%2Ftinkerhub.org%2Fevents%2F1M8ORET9A1%2Fuseless-projects-3.0)
