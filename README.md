@@ -107,29 +107,55 @@ npm run dev
 ```
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
 ### Deploy to Vercel
 
 1. Push to GitHub
 2. Import the repo on [Vercel](https://vercel.com)
-3. Add the three environment variables in Vercel's dashboard
-4. Update `NEXT_PUBLIC_SITE_URL` to your deployed URL
-5. Redeploy
+3. Add the environment variables (`NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`) in Vercel's dashboard
+4. Deploy! The app will automatically detect its Vercel URL.
 
 ## Project Documentation
 
+### Demo Video
+
+![Demo Video Placeholder]([Link to QR quest Demo video.mp4])
+*Watch the QR Quest Demo Video*
+
 ### Screenshots
 
-![Landing Page](screenshots/landing.png)
-*The QR Quest landing page with claymorphism design*
+**Landing Page**
+![Landing Page]([Link to Landing page])
+*The QR Quest landing page with brutalist design*
 
-![Create QR](screenshots/create.png)
+**Create QR Code**
+![Create QR code]([Link to Create QR code])
 *Generate a game-gated QR code for any URL*
 
-![Game Challenge](screenshots/game.png)
-*One of three random mini-games appears when scanning the QR*
+**Scan a QR Code**
+![Scan a QR code]([Link to Scan a QR code])
+*Scan QR code page*
+
+**Scan a QR code camera option**
+![Scan a QR code camera option]([Link to Scan a QR code camera option])
+*Using the camera to scan a QR code*
+
+**Game Challenge - QR Maze**
+![Game challenge - QR maze]([Link to Game challenge - QR maze])
+*Navigate through the actual QR code labyrinth*
+
+**Game Challenge - Chase**
+![Game challenge - Chase]([Link to Game challenge - Chase])
+*Collect energy dots across the QR matrix*
+
+**Game Challenge - Glitch Smasher**
+![Game challenge - Glitch smasher]([Link to Game challenge - Glitch smasher])
+*Squash glitched animated bug modules*
+
+**Game Challenge - Imposters**
+![Game challenge - Imposters]([Link to Game challenge - Imposters])
+*Spot and tap sneaky imposters camouflaged within the QR pattern*
 
 ## Team Contributions
 - Built with ❤️ for the hackathon
