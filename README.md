@@ -4,6 +4,8 @@
 
 **Game-Gated QR Codes** — Generate QR codes that challenge scanners with a mini-game before revealing the destination!
 
+🌐 **Live Website:** [https://useless-project-singularity.vercel.app/](https://useless-project-singularity.vercel.app/)
+
 ## Basic Details
 
 ### Team Name: Singularity
