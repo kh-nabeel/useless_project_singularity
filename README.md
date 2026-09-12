@@ -126,15 +126,15 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 ### Screenshots
 
 **Landing Page**
-[Landing Page](https://drive.google.com/file/d/17E1wgNnkp-R7SDti2D7VHETEOpsuUcNc/view?usp=drive_link)
+![Landing Page](images/Landing%20page.jpg)
 *The QR Quest landing page with brutalist design*
 
 **Create QR Code**
-[Create QR code](https://drive.google.com/file/d/17fpcsaAIEhYH4xXF7lfDSKQPTDCzXMvx/view?usp=drive_link)
+![Create QR code](images/Create%20QR%20code.jpg)
 *Generate a game-gated QR code for any URL*
 
 **Scan a QR Code**
-[Scan a QR code](https://drive.google.com/file/d/1UokqSeaXTK5JAHKVrWvvm5zaJBH4MnQd/view?usp=drive_link)
+![Scan a QR code](images/Scan%20a%20QR%20code.jpg)
 *Scan QR code page*
 
 **Scan a QR code camera option**
@@ -142,19 +142,19 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 *Using the camera to scan a QR code*
 
 **Game Challenge - QR Maze**
-[Game challenge - QR maze](https://drive.google.com/file/d/1ZW9KJ8v9SwDjRhl_tDkc20AKTcbTo3Fl/view?usp=drive_link)
+![Game challenge - QR maze](images/Game%20challenge%20-%20QR%20maze.png)
 *Navigate through the actual QR code labyrinth*
 
 **Game Challenge - Chase**
-[Game challenge - Chase](https://drive.google.com/file/d/1IVnx3Xfyg9XWm4EreuiCyWsMtgRP_Y2J/view?usp=drive_link)
+![Game challenge - Chase](images/Game%20challenge%20-%20Chase.png)
 *Collect energy dots across the QR matrix*
 
 **Game Challenge - Glitch Smasher**
-[Game challenge - Glitch smasher](https://drive.google.com/file/d/1oaXJrPr6k2GhLHTmRO04i1iC6dO78IwP/view?usp=drive_link)
+![Game challenge - Glitch smasher](images/Game%20challenge%20-%20Glitch%20smasher%20.png)
 *Squash glitched animated bug modules*
 
 **Game Challenge - Imposters**
-[Game challenge - Imposters](https://drive.google.com/file/d/1BHce6uEvSuSzxzbKzKzz6yYeAIqRzFT_/view?usp=drive_link)
+![Game challenge - Imposters](images/Game%20challenge%20-%20Imposters.png)
 *Spot and tap sneaky imposters camouflaged within the QR pattern*
 
 ## Team Contributions
